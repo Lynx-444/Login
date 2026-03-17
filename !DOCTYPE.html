@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Neon Dashboard Login</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #050505;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+  }
+
+  /* SPEEDOMETER */
+  .speed-container {
+    margin-top: 60px;
+    position: relative;
+    width: 300px;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .arc {
+    width: 300px;
+    height: 150px;
+    border-top: 5px solid cyan;
+    border-radius: 300px 300px 0 0;
+    box-shadow: 0 0 15px cyan, 0 0 30px cyan;
+  }
+
+  .needle {
+    width: 3px;
+    height: 120px;
+    background: #ff0033;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform-origin: bottom;
+    transform: rotate(-90deg);
+    transition: 0.4s ease;
+    box-shadow: 0 0 10px red;
+  }
+
+  .numbers span {
+    position: absolute;
+    font-size: 12px;
+    color: cyan;
+    text-shadow: 0 0 10px cyan;
+  }
+
+  .n0 { left: 0; bottom: 0; }
+  .n60 { left: 70px; bottom: 110px; }
+  .n120 { right: 70px; bottom: 110px; }
+  .n180 { right: 0; bottom: 0; }
+
+  /* GEAR SHIFTER */
+  .gear-box {
+    margin-top: 30px;
+  }
+
+  .gear {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .gear.active {
+    color: cyan;
+    border-color: cyan;
+    box-shadow: 0 0 10px cyan;
+  }
+
+  /* LOGIN */
+  .login-box {
+    margin-top: 20px;
+  }
+
+  input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 220px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background: #111;
+    color: white;
+  }
+
+  /* ENGINE BUTTON (INNER LIGHT) */
+  .engine-btn {
+    margin-top: 15px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    background: #111;
+    color: #555;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .engine-on {
+    color: red;
+    text-shadow: 0 0 10px red, 0 0 25px red;
+  }
+
+  /* LOGIN BUTTON */
+  .login-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    border: none;
+    background: cyan;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+</style>
+</head>
+
+<body>
+
+<!-- SPEEDOMETER -->
+<div class="speed-container">
+  <div class="arc"></div>
+  <div class="needle" id="needle"></div>
+
+  <div class="numbers">
+    <span class="n0">0</span>
+    <span class="n60">60</span>
+    <span class="n120">120</span>
+    <span class="n180">180</span>
+  </div>
+</div>
+
+<!-- GEAR SHIFTER -->
+<div class="gear-box">
+  <div class="gear" onclick="setGear('P')">P</div>
+  <div class="gear" onclick="setGear('R')">R</div>
+  <div class="gear" onclick="setGear('N')">N</div>
+  <div class="gear" onclick="setGear('D')">D</div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-box">
+  <h2>Driver Login</h2>
+
+  <input type="text" placeholder="Username">
+  <input type="password" placeholder="Password">
+
+  <button class="engine-btn" id="engineBtn" onclick="toggleEngine()">START</button>
+
+  <br>
+
+  <button class="login-btn">LOGIN</button>
+</div>
+
+<script>
+let speed = 0;
+let engineOn = false;
+
+function toggleEngine() {
+  let btn = document.getElementById("engineBtn");
+  engineOn = !engineOn;
+
+  if (engineOn) {
+    btn.classList.add("engine-on");
+  } else {
+    btn.classList.remove("engine-on");
+    setSpeed(0);
+  }
+}
+
+function setGear(gear) {
+  let gears = document.querySelectorAll(".gear");
+  gears.forEach(g => g.classList.remove("active"));
+
+  event.target.classList.add("active");
+
+  if (!engineOn) return;
+
+  if (gear === "P") setSpeed(0);
+  if (gear === "R") setSpeed(20);
+  if (gear === "N") setSpeed(40);
+  if (gear === "D") setSpeed(120);
+}
+
+function setSpeed(val) {
+  speed = val;
+  let needle = document.getElementById("needle");
+  let angle = (speed / 180) * 180 - 90;
+  needle.style.transform = `rotate(${angle}deg)`;
+}
+</script>
+
+</body>
+</html>
